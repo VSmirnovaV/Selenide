@@ -1,3 +1,4 @@
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,10 @@ public class CardDeliveryTest {
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
         $("[data-test-id=phone] input ").setValue("+79944232365");
         $(".button").click();
+        String expectedColor = "rgba(255, 92, 92, 1)";
+        String textColor = $("[data-test-id=agreement].input_invalid").getCssValue("color");
+        $("[data-test-id=agreement].input_invalid").shouldHave(Condition.cssValue("color", expectedColor));
+        $("[data-test-id=agreement].input_invalid").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных"));
     }
 
     @Test
@@ -126,6 +131,7 @@ public class CardDeliveryTest {
         $("[data-test-id=city].input_invalid .input__sub").shouldHave(exactText("Доставка в выбранный город недоступна"));
 
     }
+
     @Test
     void shouldEnterSpecialCharactersFieldCity() { //следует ввести специальные знаки в поле город
         open("http://localhost:9999");
@@ -138,7 +144,20 @@ public class CardDeliveryTest {
         $("[data-test-id=agreement").click();
         $(".button").click();
         $("[data-test-id=city].input_invalid .input__sub").shouldHave(exactText("Доставка в выбранный город недоступна"));
+    }
 
+    @Test
+    void shouldInvalidDate() { //следует выставить неверную дату
+        open("http://localhost:9999");
+        $("[data-test-id=city].input .input__control").setValue("Москва");
+        String currentDate = generateDate(3,"dd/MM/yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
+        $("[data-test-id=date] input").sendKeys("27.08.2023");
+        $("[data-test-id=name] input").setValue("Смирнова Виктория");
+        $("[data-test-id=phone] input").setValue("+79944232365");
+        $("[data-test-id=agreement").click();
+        $(".button").click();
+        $("[data-test-id=date] .input_invalid").shouldHave(exactText("Заказ на выбранную дату невозможен"));
     }
     @Test
     void shouldEnterInvalidNameLatin() { //следует ввести имя, фамилия на латинице
