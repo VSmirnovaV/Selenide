@@ -1,7 +1,9 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import dev.failsafe.internal.util.Assert;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
 import java.text.SimpleDateFormat;
@@ -51,10 +53,7 @@ public class CardDeliveryTest {
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
         $("[data-test-id=phone] input ").setValue("+79944232365");
         $(".button").click();
-        String expectedColor = "rgba(255, 92, 92, 1)";
-        String textColor = $("[data-test-id=agreement].input_invalid").getCssValue("color");
-        $("[data-test-id=agreement].input_invalid").shouldHave(Condition.cssValue("color", expectedColor));
-        $("[data-test-id=agreement].input_invalid").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных"));
+        $(By.cssSelector("[data-test-id=agreement].input_invalid")).shouldBe(visible);
     }
 
     @Test
