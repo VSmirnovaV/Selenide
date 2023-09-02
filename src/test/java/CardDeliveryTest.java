@@ -33,7 +33,7 @@ public class CardDeliveryTest {
     void shouldOrderCard() { //Успешная отправка формы
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -41,13 +41,17 @@ public class CardDeliveryTest {
         $("[data-test-id=agreement").click();
         $(".button").click();
         $(withText("Успешно")).shouldHave(visible, Duration.ofSeconds(15));
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + currentDate), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
+
     }
 
     @Test
     void shouldFormSubmissionWithoutCheckbox() { //следует отправить форму без флажка
         open("http://localhost:9999");
         $("[data-test-id=city] input ").setValue("Москва");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -60,7 +64,7 @@ public class CardDeliveryTest {
     void shouldEnterInvalidCity() { //следует указать неверный город
         open("http://localhost:9999");
         $("[data-test-id=city] input ").setValue("Кандалакша");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -75,7 +79,7 @@ public class CardDeliveryTest {
     void shouldEnterInvalidCityLatin() { //следует указать город на латинице
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Moscow");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -90,7 +94,7 @@ public class CardDeliveryTest {
     void shouldLeaveEmptyFieldCity() { //следует оставить поле город пустым
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -105,7 +109,7 @@ public class CardDeliveryTest {
     void shouldEnterSpacesFieldCity() { //следует ввести пробелы в поле город
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("           ");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -120,7 +124,7 @@ public class CardDeliveryTest {
     void shouldEnterNumbersFieldCity() { //следует ввести цифры в поле город
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("123456987");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -135,7 +139,7 @@ public class CardDeliveryTest {
     void shouldEnterSpecialCharactersFieldCity() { //следует ввести специальные знаки в поле город
         open("http://localhost:9999");
         $("[data-test-id=city].input .input__control").setValue("%№$$$");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -149,7 +153,7 @@ public class CardDeliveryTest {
     void shouldInvalidDate() { //следует выставить неверную дату
         open("http://localhost:9999");
         $("[data-test-id=city].input .input__control").setValue("Москва");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys("27.08.2023");
         $("[data-test-id=name] input").setValue("Смирнова Виктория");
@@ -162,7 +166,7 @@ public class CardDeliveryTest {
     void shouldEnterInvalidNameLatin() { //следует ввести имя, фамилия на латинице
         open("http://localhost:9999");
         $("[data-test-id=city].input .input__control").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Smirnova Viktoria");
@@ -175,7 +179,7 @@ public class CardDeliveryTest {
     void shouldEnterInvalidNameNumbers() { //следует ввести цифры в поле имя
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("12366547989");
@@ -188,7 +192,7 @@ public class CardDeliveryTest {
     void shouldEnterInvalidNameSpecialCharacters() { //следует ввести специальные знаки в поле имя
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("12366547989");
@@ -201,7 +205,7 @@ public class CardDeliveryTest {
     void shouldLeaveEmptyFieldName() { //следует оставить поле имя пустым
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("");
@@ -215,7 +219,7 @@ public class CardDeliveryTest {
     void shouldEnterSpacesFieldName() { //следует ввести пробелы в поле имя
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("            ");
@@ -229,7 +233,7 @@ public class CardDeliveryTest {
     void shouldEnterNameWithADash() { //следует ввести имя через дефис
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -237,13 +241,16 @@ public class CardDeliveryTest {
         $("[data-test-id=agreement").click();
         $(".button").click();
         $(withText("Успешно")).shouldHave(visible, Duration.ofSeconds(15));
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + currentDate), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
     }
 
     @Test
     void shouldEnterNumberThrough8() { //следует ввести номер через 8
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -257,7 +264,7 @@ public class CardDeliveryTest {
     void shouldEnter12Numbers() { //следует ввести 12 цифр
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -271,7 +278,7 @@ public class CardDeliveryTest {
     void shouldEnter1Numbers() { //следует ввести 1 цифру
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -285,7 +292,7 @@ public class CardDeliveryTest {
     void shouldEnter10Numbers() { //следует ввести 10 цифр
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -299,7 +306,7 @@ public class CardDeliveryTest {
     void shouldEmptyFieldNumber() { //следует оставить поле пустым
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -313,7 +320,7 @@ public class CardDeliveryTest {
     void shouldEnterSpacesFieldNumber() { //следует ввести пробелы в поле номер
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -327,7 +334,7 @@ public class CardDeliveryTest {
     void shouldEnterLatinNumber() { //следует ввести латиницу в поле номер
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -340,7 +347,7 @@ public class CardDeliveryTest {
     void shouldEnterCyrillicNumber() { //следует ввести кириллицу в поле номер
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -354,7 +361,7 @@ public class CardDeliveryTest {
     void shouldEnterSpecialCharactersNumber() { //следует ввести специальные знаки в поле номер
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
@@ -368,7 +375,7 @@ public class CardDeliveryTest {
     void shouldEnterPlusSignAtTheEndNumber() { //следует ввести плюс в конце номера
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        String currentDate = generateDate(3,"dd/MM/yyyy");
+        String currentDate = generateDate(3,"dd.MM.yyyy");
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT,Keys.HOME),Keys.DELETE);
         $("[data-test-id=date] input").sendKeys(currentDate);
         $("[data-test-id=name] input").setValue("Анна-Мария Иванова");
